@@ -6,6 +6,7 @@ import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
+import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.types.DoubleValue;
 import org.apache.flink.types.StringValue;
 import org.apache.flink.util.Collector;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class AverageRating {
     public static void main(String[] args) throws Exception {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
             DataSet<Tuple3<Long, String, String>> movies = env.readCsvFile("data/movies.csv")
                     .ignoreFirstLine()

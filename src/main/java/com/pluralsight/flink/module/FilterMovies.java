@@ -5,6 +5,7 @@ import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple3;
+import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.hadoop.util.hash.Hash;
 
 import java.util.Arrays;
@@ -15,9 +16,13 @@ public class FilterMovies {
 
     public static void main(String[] args) throws Exception{
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        env.readCsvFile("data/movies.csv")
+        ParameterTool parameters = ParameterTool.fromArgs(args);
+        String input = parameters.getRequired("input");
+        String output= parameters.getRequired("output");
+
+        env.readCsvFile(input)
                     .ignoreFirstLine()
                     .parseQuotedStrings('"')
                     .ignoreInvalidLines()
@@ -37,7 +42,7 @@ public class FilterMovies {
                         return movie.getGenres().contains("Drama");
                     }
                 })
-                .writeAsText("output/filter-output");
+                .writeAsText(output);
 
         // Execute the processing plan
         env.execute();
