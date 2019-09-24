@@ -1,5 +1,6 @@
 package com.pluralsight.flink.module;
 
+import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
@@ -16,24 +17,30 @@ public class FilterMovies {
 
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Long, String, String>> lines = env.readCsvFile("data/movies.csv")
-                .ignoreFirstLine()
-                .parseQuotedStrings('"')
-                .ignoreInvalidLines()
-                .types(Long.class, String.class, String.class);
+        env.readCsvFile("data/movies.csv")
+                    .ignoreFirstLine()
+                    .parseQuotedStrings('"')
+                    .ignoreInvalidLines()
+                    .types(Long.class, String.class, String.class)
+                .map(new MapFunction<Tuple3<Long, String, String>, Movie>() {
+                    @Override
+                    public Movie map(Tuple3<Long, String, String> line) throws Exception {
 
-        DataSet<Movie> movies = lines.map(new MapFunction<Tuple3<Long, String, String>, Movie>() {
-            @Override
-            public Movie map(Tuple3<Long, String, String> line) throws Exception {
+                        String movieName = line.f1;
+                        String[] genres = line.f2.split("\\|");
 
-                String movieName = line.f1;
-                String[] genres = line.f2.split("\\|");
+                        return new Movie(movieName, new HashSet<>(Arrays.asList(genres)));
+                    }})
+                .filter(new FilterFunction<Movie>() {
+                    @Override
+                    public boolean filter(Movie movie) throws Exception {
+                        return movie.getGenres().contains("Drama");
+                    }
+                })
+                .writeAsText("output/filter-output");
 
-                return new Movie(movieName, new HashSet<>(Arrays.asList(genres)));
-            }
-        });
-
-        movies.print();
+        // Execute the processing plan
+        env.execute();
     }
 }
 
