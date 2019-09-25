@@ -11,12 +11,7 @@ public class FilterEnglishTweets {
     public static void main(String[] args) throws Exception {
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        Properties props = new Properties();
-        props.setProperty(TwitterSource.CONSUMER_KEY, "..");
-        props.setProperty(TwitterSource.CONSUMER_SECRET, "..");
-        props.setProperty(TwitterSource.TOKEN, "...");
-        props.setProperty(TwitterSource.TOKEN_SECRET, "...");
-
+        Properties props = TwitterConfiguration.getProperties();
 
         env.addSource(new TwitterSource(props))
                 .map(new MapToTweet())
