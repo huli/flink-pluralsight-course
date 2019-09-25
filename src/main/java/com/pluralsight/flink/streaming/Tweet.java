@@ -7,9 +7,10 @@ class Tweet {
     private String text;
     private List<String> tags;
 
-    public Tweet(String language, String text) {
+    public Tweet(String language, String text, List<String> tags) {
         this.language = language;
         this.text = text;
+        this.tags = tags;
     }
 
     public String getLanguage() {
