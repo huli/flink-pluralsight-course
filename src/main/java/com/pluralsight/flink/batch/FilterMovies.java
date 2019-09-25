@@ -1,12 +1,10 @@
-package com.pluralsight.flink.module;
+package com.pluralsight.flink.batch;
 
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.utils.ParameterTool;
-import org.apache.hadoop.util.hash.Hash;
 
 import java.util.Arrays;
 import java.util.HashSet;
