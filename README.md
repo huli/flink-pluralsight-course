@@ -9,4 +9,6 @@ Project for the 'Understanding Apache Flink' course on pluralsight
 https://grouplens.org/datasets/movielens/
 
 
-
+**Control Stream Input**\
+If you want to open a socket for control messages on windows you can use [powercat](https://github.com/besimorhino/powercat):\
+`PS C:\WINDOWS\system32> powercat -l 9876`
